@@ -10,7 +10,9 @@ var express = require('express');
 var app = express();
 
 //app.use(express.json()); //들어오는 data가 json형식일때도 파싱할수있게함
-app.use(bodyParser.urlencoded({ extended: false }));  //Body parser init
+app.use(bodyParser.urlencoded({
+    extended: false
+})); //Body parser init
 
 
 //Userlist를 불러오기 위한 html 메서드
@@ -23,14 +25,14 @@ app.post('/user/register', routesUser.register);
 app.put('/user/update', routesUser.update);
 
 //TODO json 파일에서 user를 제거
-app.delete('/user/delete', function (req, res) {
-  res.send('Got a DELETE request at /user');
-  //pop : 자동으로 빈공간 채우면서 데이터 추출
+app.delete('/user/delete', function(req, res) {
+    res.send('Got a DELETE request at /user');
+    //pop : 자동으로 빈공간 채우면서 데이터 추출
 });
 
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.listen(3000, function() {
+    console.log('Example app listening on port 3000!');
 });
 
 

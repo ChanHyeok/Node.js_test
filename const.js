@@ -1,0 +1,2 @@
+/* DATABASE */
+exports.USERS = 'users';
