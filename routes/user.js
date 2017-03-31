@@ -1,6 +1,7 @@
 var fileSys = require('fs');
 var userController = require('../controllers/userController');
 
+//TODO : 파이어베이스에서 읽어오기
 exports.list = function(req, res) {
     //user.json 파일 읽어옴_동기
     var userData = JSON.parse(fileSys.readFileSync('user.json', 'utf8'));
@@ -31,30 +32,27 @@ exports.register = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    //user.json 파일 읽어옴_동기
-    var userData = JSON.parse(fileSys.readFileSync('user.json', 'utf8'));
-    var index = req.body.index;
+    var uid = req.body.uid;
+    var id = null;
+    var password = null;
 
-    if (req.body.index) {
-        console.log('인덱스는 : ' + index);
+    if (req.body.uid) {
+        console.log('UID : ' + uid);
         if (req.body.id) {
-            userData.ID[index] = req.body.id;
-            console.log('아이디는 : ' + req.body.id);
+          id = req.body.id;
+            console.log('ID : ' + req.body.id);
         }
 
         if (req.body.password) {
-            userData.PW[index] = req.body.password;
-            console.log('비밀번호는 : ' + req.body.password);
+          password = req.body.password;
+            console.log('PW : ' + req.body.password);
         }
 
-        var tempData = JSON.stringify(userData);
-        fileSys.writeFile('./user.json', tempData, encoding = 'utf-8', function(err) {
-            if (err) throw err;
-            console.log('done! user.json updated');
-        });
-
+      userController.updateUserData(uid, id, password);
         res.send('데이터가 변경되었습니다.');
+        console.log('done! data updated successful');
     } else {
-        res.send('missing index');
+        res.send('UID가 필요합니다');
+        console.log('error! missing UID');
     }
 };

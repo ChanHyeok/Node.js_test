@@ -1,5 +1,6 @@
 var firebase = require('firebase');
 var consts = require('../const');
+var user = require('../models/userModel');
 
 // Initialize Firebase
 // TODO: Replace with your project's customized code snippet
@@ -11,8 +12,6 @@ var config = {
 };
 // Initialize the default app
 firebase.initializeApp(config);
-console.log(firebase.name); // "[DEFAULT]"
-
 // You can retrieve services via the defaultApp variable...
 var database = firebase.database();
 
