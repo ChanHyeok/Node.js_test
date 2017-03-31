@@ -1,50 +1,5 @@
 var fileSys = require('fs');
-var firebase = require('firebase');
-var consts = require('../const');
-
-// Initialize Firebase
-// TODO: Replace with your project's customized code snippet
-var config = {
-    apiKey: "AIzaSyCARCeOvNPk4Y29I6QSzdf9jqECOobKyNs",
-    authDomain: " nodetest-e0aff.firebaseapp.com",
-    databaseURL: "https://nodetest-e0aff.firebaseio.com",
-    storageBucket: "nodetest-e0aff.appspot.com",
-};
-// Initialize the default app
-firebase.initializeApp(config);
-console.log(firebase.name); // "[DEFAULT]"
-
-// You can retrieve services via the defaultApp variable...
-var database = firebase.database();
-
-function overWriteUserData(userId, id, password) {
-    firebase.database().ref(consts.USERS + '/' + userId).set({
-        uid: userId,
-        id: id,
-        password: password
-    });
-}
-
-function createUserData(id, password) {
-    //새로운 키 할당
-    var newKey = firebase.database().ref().child(consts.USERS).push().key;
-
-    updateUserData(newKey, id, password);
-}
-
-function updateUserData(uid, id, password) {
-    //TODO : usermodel
-    var userModel = {
-        uid: uid,
-        id: id,
-        password: password
-    };
-
-    var updates = {};
-    updates['/' + consts.USERS + '/' + uid] = userModel;
-    return firebase.database().ref().update(updates);
-}
-
+var userController = require('../controllers/userController');
 
 exports.list = function(req, res) {
     //user.json 파일 읽어옴_동기
@@ -59,31 +14,16 @@ exports.list = function(req, res) {
 };
 
 exports.register = function(req, res) {
-    //user.json 파일 읽어옴_동기
-    var userData = JSON.parse(fileSys.readFileSync('user.json', 'utf8'));
-
     var userId = req.body.id;
     var userPw = req.body.password;
     if (userId && userPw) { //id와 password를 모두 받았을 경우
-        console.log('done! registeration success');
         console.log('ID : ' + userId + '\nPW : ' + userPw);
-        res.send('성공적으로 등록되었습니다.');
 
-
-        userData.ID.push(userId);
-        userData.PW.push(userPw);
-
-        //user.Json 파일에 저장하기
-        // var tempData = JSON.stringify(userData);
-        // fileSys.writeFile('./user.json',tempData,encoding='utf-8',function(err){
-        //   if(err) throw err;
-        //   console.log('done! user.json updated');
-        // });
-
-        //overWriteUserData('test', userId, userPw);
-        createUserData(userId, userPw);
-    } //데이터가 부족할 경우
-    else {
+        userController.createUserData(userId, userPw);
+        res.send('성공적으로 등록되었습니다.'); //TODO : 콜백으로 빼기
+        console.log('done! registeration success');
+    }
+    else {  //데이터가 부족할 경우
         //TODO : 다이얼로그 표시. 데이터를 모두 입력하세요
         console.log('error! Lack of Data to registeration');
         res.send('데이터를 모두 입력하세요.');
