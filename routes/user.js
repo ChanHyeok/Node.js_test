@@ -31,12 +31,13 @@ exports.register = function(req, res) {
     }
 };
 
+//uid를 받아 해당 children을 업데이트 하는 함수
 exports.update = function(req, res) {
     var uid = req.body.uid;
     var id = null;
     var password = null;
 
-    if (req.body.uid) {
+    if (uid) {
         console.log('UID : ' + uid);
         if (req.body.id) {
           id = req.body.id;
@@ -53,6 +54,20 @@ exports.update = function(req, res) {
         console.log('done! data updated successful');
     } else {
         res.send('UID가 필요합니다');
-        console.log('error! missing UID');
+        console.log('error! missing UID for update');
     }
+};
+
+//uid를 받아 DB에서 날리는 메서드
+exports.delete = function(req, res) {
+  var uid = req.body.uid;
+  if(uid){  //UID를 입력받았을 경우
+    userController.deleteUserData(uid);
+    res.send('사용자 데이터가 제거되었습니다.');
+    console.log('done! data delete successful');
+  }
+  else{ //UID를 입력받지 않았을 경우
+    res.send('삭제할 데이터가 없습니다.');
+    console.log('error! missing UID for delete');
+  }
 };

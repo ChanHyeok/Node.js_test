@@ -36,5 +36,10 @@ function updateUserData(uid, id, password) {
     return firebase.database().ref().update(updates);
 }
 
+function deleteUserData(uid){
+  return firebase.database().ref().child(consts.USERS).child(uid).remove();
+}
+
 exports.updateUserData = updateUserData;
 exports.createUserData = createUserData;
+exports.deleteUserData = deleteUserData;
