@@ -1,9 +1,8 @@
 var firebase = require('firebase');
 var consts = require('../const');
-var user = require('../models/userModel');
+var userModel = require('../models/userModel');
 
 // Initialize Firebase
-// TODO: Replace with your project's customized code snippet
 var config = {
     apiKey: "AIzaSyCARCeOvNPk4Y29I6QSzdf9jqECOobKyNs",
     authDomain: " nodetest-e0aff.firebaseapp.com",
@@ -15,7 +14,6 @@ firebase.initializeApp(config);
 // You can retrieve services via the defaultApp variable...
 var database = firebase.database();
 
-
 function createUserData(id, password) {
     //새로운 키 할당
     var newKey = firebase.database().ref().child(consts.USERS).push().key;
@@ -24,15 +22,9 @@ function createUserData(id, password) {
 }
 
 function updateUserData(uid, id, password) {
-    //TODO : usermodel
-    var userModel = {
-        uid: uid,
-        id: id,
-        password: password
-    };
-
+    var newUser = userModel(uid, id, password);
     var updates = {};
-    updates['/' + consts.USERS + '/' + uid] = userModel;
+    updates['/' + consts.USERS + '/' + uid] = newUser;
     return firebase.database().ref().update(updates);
 }
 
