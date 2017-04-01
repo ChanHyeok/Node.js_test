@@ -1,5 +1,5 @@
 var firebase = require('firebase');
-var consts = require('../const');
+var consts = require('../public/const');
 var userModel = require('../models/userModel');
 
 // Initialize Firebase
@@ -12,11 +12,11 @@ var config = {
 // Initialize the default app
 firebase.initializeApp(config);
 // You can retrieve services via the defaultApp variable...
-var database = firebase.database();
+var databaseRef = firebase.database().ref();
 
 function createUserData(id, password) {
     //새로운 키 할당
-    var newKey = firebase.database().ref().child(consts.USERS).push().key;
+    var newKey = databaseRef.child(consts.USERS).push().key;
 
     updateUserData(newKey, id, password);
 }
@@ -25,11 +25,11 @@ function updateUserData(uid, id, password) {
     var newUser = userModel(uid, id, password);
     var updates = {};
     updates['/' + consts.USERS + '/' + uid] = newUser;
-    return firebase.database().ref().update(updates);
+    return databaseRef.update(updates);
 }
 
 function deleteUserData(uid){
-  return firebase.database().ref().child(consts.USERS).child(uid).remove();
+  return databaseRef.child(consts.USERS).child(uid).remove();
 }
 
 exports.updateUserData = updateUserData;
